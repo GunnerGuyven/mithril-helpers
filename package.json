@@ -5,7 +5,7 @@
   "author": "Guyven <guyven@pm.me>",
   "license": "MIT",
   "scripts": {
-    "prepare": "tsc"
+    "prepare": "tsc --removeComments && tsc --emitDeclarationOnly"
   },
   "dependencies": {
     "mithril": "^2.2.2"

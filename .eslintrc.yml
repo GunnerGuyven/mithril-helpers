@@ -9,7 +9,7 @@ plugins:
   - "eslint-plugin-tsdoc"
 parser: "@typescript-eslint/parser"
 parserOptions:
-  project: true
-  tsconfigRootDir: __dirname
+  # project: true
+  # tsconfigRootDir: __dirname
   ecmaVersion: 2018
   sourceType: module
