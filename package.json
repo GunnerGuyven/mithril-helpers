@@ -1,5 +1,5 @@
 {
-  "name": "mithril-helpers",
+  "name": "@guyven/mithril-helpers",
   "version": "0.1.0",
   "description": "Use mithril.js to create web elements that are styled, interactive, and functional",
   "author": "Guyven <guyven@pm.me>",
