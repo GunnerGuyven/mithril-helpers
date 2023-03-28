@@ -14,15 +14,16 @@
       "default": "./dist/util.js"
     }
   },
-  "dependencies": {
-    "mithril": "^2.2.2"
-  },
   "devDependencies": {
     "@types/mithril": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
     "@typescript-eslint/parser": "^5.56.0",
     "eslint": "^8.36.0",
     "eslint-plugin-tsdoc": "^0.2.17",
+    "mithril": "^2.2.2",
     "typescript": "^5.0.2"
+  },
+  "peerDependencies": {
+    "mithril": "^2.2.2"
   }
 }
