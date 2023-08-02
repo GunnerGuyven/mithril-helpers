@@ -159,7 +159,22 @@ export const CreateRealtimeChannel_WS = (
         : ws.readyState === WebSocket.CLOSING
         ? "CLOSING"
         : "CLOSED"
-    }, 
+    },
     send,
   }
 }
+
+const itemsToString = ({
+  items = Array<string | false>(),
+  delimiter = " ",
+  prefix = "",
+}) => {
+  const result = items.filter(i => i).join(delimiter)
+  return result && prefix + result
+}
+
+/**
+ * items that are 'false' or blank will be omitted from outcome
+ */
+export const SpaceDelimitedStringFromItems = (...items: (string | false)[]) =>
+  itemsToString({ items })

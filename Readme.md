@@ -2,6 +2,7 @@
 
 This is a collection of utility methods and building blocks for developing applications rapidly using [Mithril.js](https://mithril.js.org/) as the renderer.
 
+- `0.2.1` 2023-08-02 : Added `SpaceDelimitedStringFromItems` helper
 - `0.2.0` 2023-04-03 : Added websocket wrapper
 - `0.1.0` 2023-03-26 : Initial release
 
