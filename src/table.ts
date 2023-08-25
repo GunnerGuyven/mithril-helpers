@@ -13,7 +13,7 @@ type PaginationStyle = {
   pageSizeContainer?: string
 }
 
-type PaginationAttrs = Partial<{
+export type PaginationAttrs = Partial<{
   total: number
   selected: number
   onPageChange: (newPageNum: number) => void
@@ -45,7 +45,7 @@ export const bulmaPaginationStyle: PaginationStyle = {
 }
 
 export const PaginationStateful: m.ClosureComponent<{
-  state: PaginationAttrs
+  state?: PaginationAttrs
 }> = initialVnode => {
   const { state = {} } = initialVnode.attrs
   const _change = state.onPageChange
@@ -56,104 +56,105 @@ export const PaginationStateful: m.ClosureComponent<{
   return { view: () => m(Pagination, state) }
 }
 
-export const Pagination: m.ClosureComponent<PaginationAttrs> = initialVnode => {
-  const {
-    proximity = 2,
-    pageSize,
-    pageSizeOptions = [5, 10, 15, 20],
-    onPageChange = () => {},
-    onPageSizeChange = () => {},
-    prevIndicator = "←", // "←" "⇽" "⟵" "⇐" "⊲" "‹" "◃" "◂" "≺" "≪" "⋘" "⦑" "⟨" "⟪" "⧏" "⪡" "⪻" "«" "⪦"
-    nextIndicator = "→", // "→" "⇾" "⟶" "⇒" "⊳" "›" "▹" "▸" "≻" "≫" "⋙" "⦒" "⟩" "⟫" "⧐" "⪢" "⪼" "»" "⪧"
-    skipIndicator = "…", // "‥"
-    style = bulmaPaginationStyle,
-  } = initialVnode.attrs
+export const Pagination: m.Component<PaginationAttrs> = {
+  view: vNode => {
+    const {
+      total = 0,
+      selected = 1,
+      onPageChange = () => {},
 
-  const item = style.itemOuter
-    ? (num: number, current = false) =>
-        m(
-          style.itemOuter!,
-          { key: "p" + num },
+      pageSize,
+      pageSizeOptions = [5, 10, 15, 20],
+      onPageSizeChange = () => {},
+
+      proximity = 2,
+      prevIndicator = "←", // "←" "⇽" "⟵" "⇐" "⊲" "‹" "◃" "◂" "≺" "≪" "⋘" "⦑" "⟨" "⟪" "⧏" "⪡" "⪻" "«" "⪦"
+      nextIndicator = "→", // "→" "⇾" "⟶" "⇒" "⊳" "›" "▹" "▸" "≻" "≫" "⋙" "⦒" "⟩" "⟫" "⧐" "⪢" "⪼" "»" "⪧"
+      skipIndicator = "…", // "‥"
+      style = bulmaPaginationStyle,
+    } = vNode.attrs
+
+    const item = style.itemOuter
+      ? (num: number, current = false) =>
+          m(
+            style.itemOuter!,
+            { key: "p" + num },
+            m(
+              current ? style.itemCurrent : style.item,
+              {
+                "aria-label": "Go to Page " + num,
+                onclick: () => onPageChange(num),
+              },
+              num
+            )
+          )
+      : (num: number, current = false) =>
           m(
             current ? style.itemCurrent : style.item,
             {
-              "aria-label": "Go to page " + num,
+              key: "p" + num,
+              "aria-label": "Go to Page " + num,
               onclick: () => onPageChange(num),
             },
             num
           )
-        )
-    : (num: number, current = false) =>
-        m(
-          current ? style.itemCurrent : style.item,
-          {
-            key: "p" + num,
-            "aria-label": "Goto Page " + num,
-            onclick: () => onPageChange(num),
-          },
-          num
-        )
 
-  const skipR = style.itemOuter
-    ? m(style.itemOuter, { key: "skipR" }, m(style.itemSkip, skipIndicator))
-    : m(style.itemSkip, { key: "skipR" }, skipIndicator)
-  const skipL = style.itemOuter
-    ? m(style.itemOuter, { key: "skipL" }, m(style.itemSkip, skipIndicator))
-    : m(style.itemSkip, { key: "skipL" }, skipIndicator)
+    const skipR = style.itemOuter
+      ? m(style.itemOuter, { key: "skipR" }, m(style.itemSkip, skipIndicator))
+      : m(style.itemSkip, { key: "skipR" }, skipIndicator)
+    const skipL = style.itemOuter
+      ? m(style.itemOuter, { key: "skipL" }, m(style.itemSkip, skipIndicator))
+      : m(style.itemSkip, { key: "skipL" }, skipIndicator)
 
-  function* range(start: number, end: number, map: (v: number) => m.Child) {
-    for (let i = start; i <= end; i++) {
-      yield map(i)
+    function* range(start: number, end: number, map: (v: number) => m.Child) {
+      for (let i = start; i <= end; i++) {
+        yield map(i)
+      }
     }
-  }
 
-  const pageSelect = m(Select, {
-    options: pageSizeOptions.map(n => "" + n),
-    selected: [pageSize + ""],
-    onSelect: s => onPageSizeChange(Number(s[0])),
-  })
+    const pageSelect = m(Select, {
+      options: pageSizeOptions.map(n => "" + n),
+      selected: [pageSize + ""],
+      onSelect: s => onPageSizeChange(Number(s[0])),
+    })
 
-  return {
-    view: vNode => {
-      const { total = 0, selected = 1 } = vNode.attrs
-      const list = (selected: number) => [
-        ...(selected > proximity + 3
-          ? [item(1), skipL, ...range(selected - proximity, selected - 1, item)]
-          : range(1, selected - 1, item)),
-        item(selected, true),
-        ...(selected < total - proximity - 2
-          ? [
-              ...range(selected + 1, selected + proximity, item),
-              skipR,
-              item(total),
-            ]
-          : range(selected + 1, total, item)),
-      ]
-      return m(
-        style.parent,
-        { role: "navigation", "aria-label": "pagination" },
-        pageSize &&
-          (style.pageSizeContainer
-            ? m(style.pageSizeContainer, pageSelect)
-            : pageSelect),
-        m(
-          style.prev,
-          {
-            onclick: () => selected > 1 && onPageChange(selected - 1),
-            disabled: selected <= 1,
-          },
-          prevIndicator
-        ),
-        m(
-          style.next,
-          {
-            onclick: () => selected < total && onPageChange(selected + 1),
-            disabled: selected >= total,
-          },
-          nextIndicator
-        ),
-        m(style.itemContainer, list(selected))
-      )
-    },
-  }
+    const list = (selected: number) => [
+      ...(selected > proximity + 3
+        ? [item(1), skipL, ...range(selected - proximity, selected - 1, item)]
+        : range(1, selected - 1, item)),
+      item(selected, true),
+      ...(selected < total - proximity - 2
+        ? [
+            ...range(selected + 1, selected + proximity, item),
+            skipR,
+            item(total),
+          ]
+        : range(selected + 1, total, item)),
+    ]
+    return m(
+      style.parent,
+      { role: "navigation", "aria-label": "pagination" },
+      pageSize &&
+        (style.pageSizeContainer
+          ? m(style.pageSizeContainer, pageSelect)
+          : pageSelect),
+      m(
+        style.prev,
+        {
+          onclick: () => selected > 1 && onPageChange(selected - 1),
+          disabled: selected <= 1,
+        },
+        prevIndicator
+      ),
+      m(
+        style.next,
+        {
+          onclick: () => selected < total && onPageChange(selected + 1),
+          disabled: selected >= total,
+        },
+        nextIndicator
+      ),
+      m(style.itemContainer, list(selected))
+    )
+  },
 }

@@ -2,6 +2,7 @@
 
 This is a collection of utility methods and building blocks for developing applications rapidly using [Mithril.js](https://mithril.js.org/) as the renderer.
 
+- `0.3.1` 2023-08-24 : Converted Pagination and Select to stateless controls
 - `0.3.0` 2023-08-13 : Added Pagination and Select controls; altered endpoints in package.json
 - `0.2.1` 2023-08-02 : Added `SpaceDelimitedStringFromItems` helper
 - `0.2.0` 2023-04-03 : Added websocket wrapper

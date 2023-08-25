@@ -1,7 +1,7 @@
 import m from "mithril"
 
 type SelectOption = string | [value: string, label: string]
-export const Select: m.ClosureComponent<
+export const Select: m.Component<
   Partial<{
     /**
      * list of options to display in this select
@@ -24,39 +24,37 @@ export const Select: m.ClosureComponent<
     /** event fired on selection change */
     onSelect: (value: string[]) => void
   }>
-> = initialVnode => {
-  const {
-    options = [],
-    selected,
-    groups,
-    multiple,
-    size,
-    onSelect = () => {},
-  } = initialVnode.attrs
+> = {
+  view: vnode => {
+    const {
+      options = [],
+      selected,
+      groups,
+      multiple,
+      size,
+      onSelect = () => {},
+    } = vnode.attrs
 
-  const makeOption = (opt: SelectOption) => {
-    const [value, label] = Array.isArray(opt) ? opt : [opt, opt]
-    return m("option", { value, selected: selected?.includes(value) }, label)
-  }
+    const makeOption = (opt: SelectOption) => {
+      const [value, label] = Array.isArray(opt) ? opt : [opt, opt]
+      return m("option", { value, selected: selected?.includes(value) }, label)
+    }
 
-  const items =
-    groups?.map(([label, count]) =>
-      m("optgroup", { label }, options.splice(0, count).map(makeOption))
-    ) || []
+    const items =
+      groups?.map(([label, count]) =>
+        m("optgroup", { label }, options.splice(0, count).map(makeOption))
+      ) || []
 
-  items.push(...options.map(makeOption))
-
-  return {
-    view: () =>
-      m(
-        "select",
-        {
-          oninput: (e: { target: HTMLSelectElement }) =>
-            onSelect([...e.target.selectedOptions].map(o => o.value)),
-          multiple,
-          size,
-        },
-        items
-      ),
-  }
+    items.push(...options.map(makeOption))
+    return m(
+      "select",
+      {
+        oninput: (e: { target: HTMLSelectElement }) =>
+          onSelect([...e.target.selectedOptions].map(o => o.value)),
+        multiple,
+        size,
+      },
+      items
+    )
+  },
 }
