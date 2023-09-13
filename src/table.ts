@@ -77,12 +77,12 @@ export const Pagination: m.Component<PaginationAttrs> = {
     const item = style.itemOuter
       ? (num: number, current = false) =>
           m(
-            style.itemOuter!,
-            { key: "p" + num },
+            style.itemOuter || "",
+            { key: `p${num}` },
             m(
               current ? style.itemCurrent : style.item,
               {
-                "aria-label": "Go to Page " + num,
+                "aria-label": `Go to Page ${num}`,
                 onclick: () => onPageChange(num),
               },
               num
@@ -92,8 +92,8 @@ export const Pagination: m.Component<PaginationAttrs> = {
           m(
             current ? style.itemCurrent : style.item,
             {
-              key: "p" + num,
-              "aria-label": "Go to Page " + num,
+              key: `p${num}`,
+              "aria-label": `Go to Page ${num}`,
               onclick: () => onPageChange(num),
             },
             num
@@ -113,8 +113,8 @@ export const Pagination: m.Component<PaginationAttrs> = {
     }
 
     const pageSelect = m(Select, {
-      options: pageSizeOptions.map(n => "" + n),
-      selected: [pageSize + ""],
+      options: pageSizeOptions.map(n => n.toFixed()),
+      selected: pageSize ? [pageSize.toFixed()] : undefined,
       onSelect: s => onPageSizeChange(Number(s[0])),
     })
 

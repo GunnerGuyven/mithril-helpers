@@ -7,9 +7,11 @@ extends:
 plugins:
   - "@typescript-eslint/eslint-plugin"
   - "eslint-plugin-tsdoc"
+rules:
+  "@typescript-eslint/no-empty-function": off
 parser: "@typescript-eslint/parser"
 parserOptions:
-  # project: true
+  project: true
   # tsconfigRootDir: __dirname
   ecmaVersion: 2018
   sourceType: module
