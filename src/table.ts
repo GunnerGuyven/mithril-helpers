@@ -1,4 +1,4 @@
-import m from "mithril"
+import m, { Children } from "mithril"
 import { Select } from "./form.js"
 
 type PaginationStyle = {
@@ -13,7 +13,7 @@ type PaginationStyle = {
   pageSizeContainer?: string
 }
 
-export type PaginationAttrs = Partial<{
+type PaginationAttrs = Partial<{
   total: number
   selected: number
   onPageChange: (newPageNum: number) => void
@@ -157,4 +157,165 @@ export const Pagination: m.Component<PaginationAttrs> = {
       m(style.itemContainer, list(selected))
     )
   },
+}
+
+type GridDataRow = { cells: Children[]; subGrid?: GridData }
+export type GridData = {
+  meta: Partial<{ subGridFieldIdx: number; showHeader: boolean }>
+  columns: Children[]
+  rows: GridDataRow[]
+}
+
+const GridField: m.Component<{
+  isHeader?: boolean
+  value: Children
+}> = {
+  view: vnode => {
+    const { value, isHeader = false } = vnode.attrs
+    return m(isHeader ? "th" : "td", value)
+  },
+}
+
+const GridHeaderRow: m.Component<{
+  columns: Children[]
+}> = {
+  view: vnode => {
+    const { columns } = vnode.attrs
+    return m(
+      "tr",
+      columns.map(f => m(GridField, { value: f, isHeader: true }))
+    )
+  },
+}
+
+const GridRow: m.Component<{
+  row: GridDataRow
+  renderKey: string | number
+  subGridFieldIdx: number
+}> = {
+  view: vnode => {
+    const { row, renderKey, subGridFieldIdx } = vnode.attrs
+    const cells: Children[] = row.cells.map(f => m(GridField, { value: f }))
+    row.subGrid &&
+      cells.splice(subGridFieldIdx, 0, m(Grid, { data: row.subGrid }))
+    return m(`tr[key-in=${renderKey}]`, { key: renderKey }, cells)
+  },
+}
+
+export const Grid: m.Component<{ data?: GridData }> = {
+  view: vnode => {
+    const { data } = vnode.attrs
+    const { meta, rows, columns } = data || {
+      meta: { showHeader: true },
+      rows: [],
+      columns: [],
+    }
+    return columns.length
+      ? m(
+          "table",
+          meta.showHeader && m("thead", m(GridHeaderRow, { columns })),
+          rows.map((row, idx) =>
+            m(GridRow, {
+              row,
+              renderKey: idx,
+              subGridFieldIdx: meta.subGridFieldIdx || -1,
+            })
+          )
+        )
+      : m("", "Empty Result")
+  },
+}
+
+export type PagedGridData = GridData & { paginationProps: PaginationAttrs }
+export const PagedGrid: m.Component<
+  Partial<{
+    data: PagedGridData
+    paginationAbove: boolean
+    paginationBelow: boolean
+  }>
+> = {
+  view: vnode => {
+    const {
+      data,
+      paginationAbove = false,
+      paginationBelow = true,
+    } = vnode.attrs
+
+    return [
+      paginationAbove && m(Pagination, data?.paginationProps || {}),
+      m(Grid, { data }),
+      paginationBelow && m(Pagination, data?.paginationProps || {}),
+    ]
+  },
+}
+
+type GridDataSubItem = Record<string, Children>[]
+export const createGridData = (
+  data?: Record<string, Children | GridDataSubItem>[],
+  {
+    showHeader = true,
+    autoDetectSubGridField = true,
+    subGridField,
+    subGridFieldIdx = -1,
+  }: Partial<{
+    showHeader: boolean
+    subGridField: string
+    subGridFieldIdx: number
+    autoDetectSubGridField: boolean
+  }> = {}
+): GridData | undefined => {
+  if (!data || !data.length) return undefined
+  const columns = Object.keys(data[0])
+  subGridFieldIdx = subGridField ? columns.indexOf(subGridField) : -1
+  if (subGridFieldIdx === -1 && autoDetectSubGridField) {
+    subGridFieldIdx = Object.values(data[0]).findIndex(v => Array.isArray(v))
+  }
+
+  const rows = data.map(r => {
+    const x = Object.values(r)
+    const subGrid =
+      subGridFieldIdx > -1 &&
+      (x.splice(subGridFieldIdx, 1)[0] as GridDataSubItem)
+    return {
+      cells: x as Children[],
+      subGrid: createGridData(subGrid || undefined),
+    }
+  })
+
+  return { rows, columns, meta: { subGridFieldIdx, showHeader } }
+}
+
+export const paginateGridData = (
+  gridData?: GridData,
+  paging?: Partial<{ pageSize: number; currentPage: number }>
+): PagedGridData | undefined => {
+  if (!gridData) return undefined
+  const { pageSize = 10, currentPage = 1 } = paging || {}
+  const p = {
+    selected: currentPage,
+    pageSize,
+    get total() {
+      return Math.ceil(gridData.rows.length / p.pageSize)
+    },
+    onPageSizeChange: (size: number) => (
+      (p.pageSize = size),
+      (p.selected = Math.min(p.selected, p.total)),
+      (_page = pageTo(p.selected))
+    ),
+    onPageChange: (newPage: number) => (
+      (p.selected = newPage), (_page = pageTo(p.selected))
+    ),
+  }
+  const pageTo = (num: number) =>
+    gridData.rows.slice((num - 1) * p.pageSize, num * p.pageSize)
+  let _page = pageTo(currentPage)
+
+  // mixing spread with get does not work before ES2018
+  return {
+    ...gridData,
+    get rows() {
+      return _page
+    },
+    paginationProps: p,
+  }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@guyven/mithril-helpers",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "description": "Use mithril.js to create web elements that are styled, interactive, and functional",
   "author": "Guyven <guyven@pm.me>",
   "license": "MIT",

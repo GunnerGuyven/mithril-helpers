@@ -134,7 +134,7 @@ export const CreateRealtimeChannel_WS = (
   }
   let reconnectCount = 0
   let reconnectStop = () => {}
-  let reconnectNow = () => ((ws = setupSocket(true)), (reconnectCount = 0))
+  const reconnectNow = () => ((ws = setupSocket(true)), (reconnectCount = 0))
   let ws = setupSocket()
 
   const send = (msg: string | object) => {

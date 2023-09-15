@@ -2,6 +2,7 @@
 
 This is a collection of utility methods and building blocks for developing applications rapidly using [Mithril.js](https://mithril.js.org/) as the renderer.
 
+- `0.4.0` 2023-09-15 : Updated javascript target to ES2018; Added Grid display for table-based presentations
 - `0.3.2` 2023-09-13 : Corrected eslint settings, exposing additional errors also corrected
 - `0.3.1` 2023-08-24 : Converted Pagination and Select to stateless controls
 - `0.3.0` 2023-08-13 : Added Pagination and Select controls; altered endpoints in package.json
