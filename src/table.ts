@@ -172,7 +172,10 @@ const GridField: m.Component<{
 }> = {
   view: vnode => {
     const { value, isHeader = false } = vnode.attrs
-    return m(isHeader ? "th" : "td", value)
+    return m(
+      isHeader ? "th" : "td",
+      value === true ? "true" : value === false ? "false" : value
+    )
   },
 }
 
