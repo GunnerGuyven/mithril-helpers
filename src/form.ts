@@ -68,9 +68,9 @@ export const Select: m.Component<SelectAttrs> = {
 
 export const SelectStateful: m.ClosureComponent<{
   state?: SelectAttrs
-  onOptionChangeResetSelected?: boolean
+  whenOptionChangeResetSelected?: boolean
 }> = initialVnode => {
-  const { state = {}, onOptionChangeResetSelected = false } = initialVnode.attrs
+  const { state = {}, whenOptionChangeResetSelected = false } = initialVnode.attrs
   const _select = state.onSelect
   state.onSelect = value => {
     _select && _select(value), (state.selected = value)
@@ -79,13 +79,14 @@ export const SelectStateful: m.ClosureComponent<{
     if (state.options?.length) {
       const o = state.options[0]
       state.selected = [Array.isArray(o) ? o[0] : o]
+      _select && _select(state.selected)
     }
   }
   state.selected || resetSelected()
   let lastOptions = state.options
   return {
     view: vnode => {
-      if (onOptionChangeResetSelected) {
+      if (whenOptionChangeResetSelected) {
         const newOptions = vnode.attrs.state?.options
         if (newOptions != lastOptions) {
           lastOptions = newOptions
