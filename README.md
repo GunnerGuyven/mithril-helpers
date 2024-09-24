@@ -2,6 +2,7 @@
 
 This is a collection of utility methods and building blocks for developing applications rapidly using [Mithril.js](https://mithril.js.org/) as the renderer.
 
+- `0.4.3` 2024-09-23 : added json helpers
 - `0.4.2` 2024-03-11 : SelectStateful now triggers OnSelect when selection is reset
 - `0.4.1` 2024-03-08 : expanded functionality of Select; added boolean value handling to Grid
 - `0.4.0` 2023-09-15 : Updated javascript target to ES2018; Added Grid display for table-based presentations

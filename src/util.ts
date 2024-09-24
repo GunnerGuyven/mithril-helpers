@@ -178,3 +178,25 @@ const itemsToString = ({
  */
 export const SpaceDelimitedStringFromItems = (...items: (string | false)[]) =>
   itemsToString({ items })
+
+export const TryParseJSON = (
+  textToParse: string,
+  parseFail?: (err: unknown) => void
+) => {
+  try {
+    return JSON.parse(textToParse) as unknown
+  } catch (err) {
+    parseFail && parseFail(err)
+  }
+  return null
+}
+
+export const TryParseJSONAsType = <T>(
+  textToParse: string,
+  typeCheck: (test: unknown) => test is T,
+  parseFail?: (err: unknown) => void
+) => {
+  const x: unknown = TryParseJSON(textToParse, parseFail)
+  if(x && typeCheck(x)) return x
+  return null
+}

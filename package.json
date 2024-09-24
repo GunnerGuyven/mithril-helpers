@@ -1,29 +1,29 @@
 {
-  "name": "@guyven/mithril-helpers",
-  "version": "0.4.2",
-  "description": "Use mithril.js to create web elements that are styled, interactive, and functional",
-  "author": "Guyven <guyven@pm.me>",
-  "license": "MIT",
-  "scripts": {
-    "prepare": "tsc --removeComments && tsc --emitDeclarationOnly"
-  },
-  "type": "module",
-  "exports": {
-    ".": null,
-    "./form": "./dist/form.js",
-    "./table": "./dist/table.js",
-    "./util": "./dist/util.js"
-  },
-  "devDependencies": {
-    "@types/mithril": "^2.0.12",
-    "@typescript-eslint/eslint-plugin": "^5.56.0",
-    "@typescript-eslint/parser": "^5.56.0",
-    "eslint": "^8.36.0",
-    "eslint-plugin-tsdoc": "^0.2.17",
-    "mithril": "^2.2.2",
-    "typescript": "^5.0.2"
-  },
-  "peerDependencies": {
-    "mithril": "^2.2.2"
-  }
+	"name": "@guyven/mithril-helpers",
+	"version": "0.4.3",
+	"description": "Use mithril.js to create web elements that are styled, interactive, and functional",
+	"author": "Guyven <guyven@pm.me>",
+	"license": "MIT",
+	"scripts": {
+		"prepare": "tsc --removeComments && tsc --emitDeclarationOnly"
+	},
+	"type": "module",
+	"exports": {
+		".": null,
+		"./form": "./dist/form.js",
+		"./table": "./dist/table.js",
+		"./util": "./dist/util.js"
+	},
+	"devDependencies": {
+		"@types/mithril": "^2.0.12",
+		"@typescript-eslint/eslint-plugin": "^5.56.0",
+		"@typescript-eslint/parser": "^5.56.0",
+		"eslint": "^8.36.0",
+		"eslint-plugin-tsdoc": "^0.2.17",
+		"mithril": "^2.2.2",
+		"typescript": "^5.0.2"
+	},
+	"peerDependencies": {
+		"mithril": "^2.2.2"
+	}
 }
