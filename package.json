@@ -5,7 +5,8 @@
   "author": "Guyven <guyven@pm.me>",
   "license": "MIT",
   "scripts": {
-    "prepare": "tsc --removeComments && tsc --emitDeclarationOnly"
+    "prepare": "tsc --removeComments && tsc --emitDeclarationOnly",
+    "preinstall": "tsc --removeComments && tsc --emitDeclarationOnly"
   },
   "type": "module",
   "exports": {
