@@ -8,12 +8,15 @@
     "prepare": "tsc --removeComments && tsc --emitDeclarationOnly"
   },
   "type": "module",
+  "exports": {
+    ".": null,
+    "./form": "./dist/form.js",
+    "./table": "./dist/table.js",
+    "./util": "./dist/util.js"
+  },
   "devDependencies": {
     "@types/mithril": "^2.2.7",
     "mithril": "^2.2.4",
     "typescript": "^5.6.2"
-  },
-  "peerDependencies": {
-    "mithril": "^2.2.2"
   }
 }
