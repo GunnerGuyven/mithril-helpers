@@ -12,7 +12,8 @@
     ".": null,
     "./form": "./dist/form.js",
     "./table": "./dist/table.js",
-    "./util": "./dist/util.js"
+    "./util": "./dist/util.js",
+    "./*.ts": "./src/*.ts"
   },
   "devDependencies": {
     "@types/mithril": "^2.2.7",
