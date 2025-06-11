@@ -29,7 +29,7 @@ export const PerformCountdown = ({
 	 * event notifications will emit to console
 	 */
 	verbose: boolean
-}> = {}) => {
+}> = {}): { stop: () => void; start: () => void } => {
 	if (verbose) {
 		const _tick = tick
 		const _done = done
@@ -85,7 +85,14 @@ export const CreateRealtimeChannel_WS = (
 		 */
 		verbose: boolean
 	}> = {},
-) => {
+): {
+	reconnectNow: () => void
+	reconnectCancel: () => void
+	readonly reconnectCount: number
+	readonly websocketStateCode: number
+	readonly websocketStateLabel: "CONNECTING" | "OPEN" | "CLOSING" | "CLOSED"
+	send: (msg: string | object) => void
+} => {
 	const {
 		reconnectTimeout = 5,
 		reconnectSendMessage,
@@ -167,7 +174,7 @@ const itemsToString = ({
 	items = Array<string | false>(),
 	delimiter = " ",
 	prefix = "",
-}) => {
+}): string => {
 	const result = items.filter(i => i).join(delimiter)
 	return result && prefix + result
 }
@@ -175,13 +182,14 @@ const itemsToString = ({
 /**
  * items that are 'false' or blank will be omitted from outcome
  */
-export const SpaceDelimitedStringFromItems = (...items: (string | false)[]) =>
-	itemsToString({ items })
+export const SpaceDelimitedStringFromItems = (
+	...items: (string | false)[]
+): string => itemsToString({ items })
 
 export const TryParseJSON = (
 	textToParse: string,
 	parseFail?: (err: unknown) => void,
-) => {
+): unknown => {
 	try {
 		return JSON.parse(textToParse) as unknown
 	} catch (err) {
@@ -194,8 +202,8 @@ export const TryParseJSONAsType = <T>(
 	textToParse: string,
 	typeCheck: (test: unknown) => test is T,
 	parseFail?: (err: unknown) => void,
-) => {
-	const x: unknown = TryParseJSON(textToParse, parseFail)
+): T | null => {
+	const x = TryParseJSON(textToParse, parseFail)
 	if (x && typeCheck(x)) return x
 	return null
 }
