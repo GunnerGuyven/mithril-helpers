@@ -1,5 +1,5 @@
 import m, { Children } from "mithril"
-import { Select } from "./form.js"
+import { Select } from "./form.ts"
 
 type PaginationStyle = {
   parent: string
@@ -85,8 +85,8 @@ export const Pagination: m.Component<PaginationAttrs> = {
                 "aria-label": `Go to Page ${num}`,
                 onclick: () => onPageChange(num),
               },
-              num
-            )
+              num,
+            ),
           )
       : (num: number, current = false) =>
           m(
@@ -96,7 +96,7 @@ export const Pagination: m.Component<PaginationAttrs> = {
               "aria-label": `Go to Page ${num}`,
               onclick: () => onPageChange(num),
             },
-            num
+            num,
           )
 
     const skipR = style.itemOuter
@@ -144,7 +144,7 @@ export const Pagination: m.Component<PaginationAttrs> = {
           onclick: () => selected > 1 && onPageChange(selected - 1),
           disabled: selected <= 1,
         },
-        prevIndicator
+        prevIndicator,
       ),
       m(
         style.next,
@@ -152,9 +152,9 @@ export const Pagination: m.Component<PaginationAttrs> = {
           onclick: () => selected < total && onPageChange(selected + 1),
           disabled: selected >= total,
         },
-        nextIndicator
+        nextIndicator,
       ),
-      m(style.itemContainer, list(selected))
+      m(style.itemContainer, list(selected)),
     )
   },
 }
@@ -174,7 +174,7 @@ const GridField: m.Component<{
     const { value, isHeader = false } = vnode.attrs
     return m(
       isHeader ? "th" : "td",
-      value === true ? "true" : value === false ? "false" : value
+      value === true ? "true" : value === false ? "false" : value,
     )
   },
 }
@@ -186,7 +186,7 @@ const GridHeaderRow: m.Component<{
     const { columns } = vnode.attrs
     return m(
       "tr",
-      columns.map(f => m(GridField, { value: f, isHeader: true }))
+      columns.map(f => m(GridField, { value: f, isHeader: true })),
     )
   },
 }
@@ -222,8 +222,8 @@ export const Grid: m.Component<{ data?: GridData }> = {
               row,
               renderKey: idx,
               subGridFieldIdx: meta.subGridFieldIdx || -1,
-            })
-          )
+            }),
+          ),
         )
       : m("", "Empty Result")
   },
@@ -265,7 +265,7 @@ export const createGridData = (
     subGridField: string
     subGridFieldIdx: number
     autoDetectSubGridField: boolean
-  }> = {}
+  }> = {},
 ): GridData | undefined => {
   if (!data || !data.length) return undefined
   const columns = Object.keys(data[0])
@@ -290,7 +290,7 @@ export const createGridData = (
 
 export const paginateGridData = (
   gridData?: GridData,
-  paging?: Partial<{ pageSize: number; currentPage: number }>
+  paging?: Partial<{ pageSize: number; currentPage: number }>,
 ): PagedGridData | undefined => {
   if (!gridData) return undefined
   const { pageSize = 10, currentPage = 1 } = paging || {}

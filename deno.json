@@ -1,0 +1,20 @@
+{
+  "name": "@guyven/mithril-helpers",
+  "version": "0.4.5",
+  "license": "MIT",
+  "exports": {
+    "./form": "./form.ts",
+    "./table": "./table.ts",
+    "./util": "./util.ts"
+  },
+  "publish": {
+    "include": [
+      "LICENSE",
+      "README.md",
+      "deno.json",
+      "form.ts",
+      "table.ts",
+      "util.ts"
+    ]
+  }
+}
