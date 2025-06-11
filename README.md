@@ -4,7 +4,8 @@ This is a collection of utility methods and building blocks for developing
 applications rapidly using [Mithril.js](https://mithril.js.org/) as the
 renderer.
 
-- `0.4.5` 2025-06-11 : converted to deno for first jsr release
+- `0.4.5` 2025-06-11 : converted to deno for first jsr release;
+  formatting updates
 - `0.4.4` 2024-10-29 : updated `package.json` to expand the options of
   consuming projects
 - `0.4.3` 2024-09-23 : added json helpers
