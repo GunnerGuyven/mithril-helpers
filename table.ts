@@ -1,4 +1,4 @@
-import m, { Children } from "mithril"
+import m, { type Children } from "mithril"
 import { Select } from "./form.ts"
 
 type PaginationStyle = {
