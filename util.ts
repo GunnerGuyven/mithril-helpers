@@ -84,7 +84,7 @@ export const CreateRealtimeChannel_WS = (
      * event notifications will emit to console
      */
     verbose: boolean
-  }> = {}
+  }> = {},
 ) => {
   const {
     reconnectTimeout = 5,
@@ -152,13 +152,12 @@ export const CreateRealtimeChannel_WS = (
       return ws.readyState
     },
     get websocketStateLabel() {
-      return ws.readyState === WebSocket.CONNECTING
-        ? "CONNECTING"
-        : ws.readyState === WebSocket.OPEN
-        ? "OPEN"
-        : ws.readyState === WebSocket.CLOSING
-        ? "CLOSING"
+      return (
+        ws.readyState === WebSocket.CONNECTING ? "CONNECTING"
+        : ws.readyState === WebSocket.OPEN ? "OPEN"
+        : ws.readyState === WebSocket.CLOSING ? "CLOSING"
         : "CLOSED"
+      )
     },
     send,
   }
@@ -181,7 +180,7 @@ export const SpaceDelimitedStringFromItems = (...items: (string | false)[]) =>
 
 export const TryParseJSON = (
   textToParse: string,
-  parseFail?: (err: unknown) => void
+  parseFail?: (err: unknown) => void,
 ) => {
   try {
     return JSON.parse(textToParse) as unknown
@@ -194,9 +193,9 @@ export const TryParseJSON = (
 export const TryParseJSONAsType = <T>(
   textToParse: string,
   typeCheck: (test: unknown) => test is T,
-  parseFail?: (err: unknown) => void
+  parseFail?: (err: unknown) => void,
 ) => {
   const x: unknown = TryParseJSON(textToParse, parseFail)
-  if(x && typeCheck(x)) return x
+  if (x && typeCheck(x)) return x
   return null
 }

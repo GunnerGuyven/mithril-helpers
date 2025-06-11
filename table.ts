@@ -74,8 +74,9 @@ export const Pagination: m.Component<PaginationAttrs> = {
       style = bulmaPaginationStyle,
     } = vNode.attrs
 
-    const item = style.itemOuter
-      ? (num: number, current = false) =>
+    const item =
+      style.itemOuter ?
+        (num: number, current = false) =>
           m(
             style.itemOuter || "",
             { key: `p${num}` },
@@ -99,11 +100,13 @@ export const Pagination: m.Component<PaginationAttrs> = {
             num,
           )
 
-    const skipR = style.itemOuter
-      ? m(style.itemOuter, { key: "skipR" }, m(style.itemSkip, skipIndicator))
+    const skipR =
+      style.itemOuter ?
+        m(style.itemOuter, { key: "skipR" }, m(style.itemSkip, skipIndicator))
       : m(style.itemSkip, { key: "skipR" }, skipIndicator)
-    const skipL = style.itemOuter
-      ? m(style.itemOuter, { key: "skipL" }, m(style.itemSkip, skipIndicator))
+    const skipL =
+      style.itemOuter ?
+        m(style.itemOuter, { key: "skipL" }, m(style.itemSkip, skipIndicator))
       : m(style.itemSkip, { key: "skipL" }, skipIndicator)
 
     function* range(start: number, end: number, map: (v: number) => m.Child) {
@@ -119,25 +122,21 @@ export const Pagination: m.Component<PaginationAttrs> = {
     })
 
     const list = (selected: number) => [
-      ...(selected > proximity + 3
-        ? [item(1), skipL, ...range(selected - proximity, selected - 1, item)]
-        : range(1, selected - 1, item)),
+      ...(selected > proximity + 3 ?
+        [item(1), skipL, ...range(selected - proximity, selected - 1, item)]
+      : range(1, selected - 1, item)),
       item(selected, true),
-      ...(selected < total - proximity - 2
-        ? [
-            ...range(selected + 1, selected + proximity, item),
-            skipR,
-            item(total),
-          ]
-        : range(selected + 1, total, item)),
+      ...(selected < total - proximity - 2 ?
+        [...range(selected + 1, selected + proximity, item), skipR, item(total)]
+      : range(selected + 1, total, item)),
     ]
     return m(
       style.parent,
       { role: "navigation", "aria-label": "pagination" },
       pageSize &&
-        (style.pageSizeContainer
-          ? m(style.pageSizeContainer, pageSelect)
-          : pageSelect),
+        (style.pageSizeContainer ?
+          m(style.pageSizeContainer, pageSelect)
+        : pageSelect),
       m(
         style.prev,
         {
@@ -166,22 +165,19 @@ export type GridData = {
   rows: GridDataRow[]
 }
 
-const GridField: m.Component<{
-  isHeader?: boolean
-  value: Children
-}> = {
+const GridField: m.Component<{ isHeader?: boolean; value: Children }> = {
   view: vnode => {
     const { value, isHeader = false } = vnode.attrs
     return m(
       isHeader ? "th" : "td",
-      value === true ? "true" : value === false ? "false" : value,
+      value === true ? "true"
+      : value === false ? "false"
+      : value,
     )
   },
 }
 
-const GridHeaderRow: m.Component<{
-  columns: Children[]
-}> = {
+const GridHeaderRow: m.Component<{ columns: Children[] }> = {
   view: vnode => {
     const { columns } = vnode.attrs
     return m(
@@ -213,8 +209,8 @@ export const Grid: m.Component<{ data?: GridData }> = {
       rows: [],
       columns: [],
     }
-    return columns.length
-      ? m(
+    return columns.length ?
+        m(
           "table",
           meta.showHeader && m("thead", m(GridHeaderRow, { columns })),
           rows.map((row, idx) =>

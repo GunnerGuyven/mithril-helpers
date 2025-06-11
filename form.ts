@@ -46,8 +46,8 @@ export const Select: m.Component<SelectAttrs> = {
       m(
         "optgroup",
         { label },
-        options.slice(optionsOffset, (optionsOffset += count)).map(makeOption)
-      )
+        options.slice(optionsOffset, (optionsOffset += count)).map(makeOption),
+      ),
     )
     items.push(...options.slice(optionsOffset).map(makeOption))
 
@@ -61,7 +61,7 @@ export const Select: m.Component<SelectAttrs> = {
         multiple,
         size,
       },
-      items
+      items,
     )
   },
 }
@@ -70,7 +70,8 @@ export const SelectStateful: m.ClosureComponent<{
   state?: SelectAttrs
   whenOptionChangeResetSelected?: boolean
 }> = initialVnode => {
-  const { state = {}, whenOptionChangeResetSelected = false } = initialVnode.attrs
+  const { state = {}, whenOptionChangeResetSelected = false } =
+    initialVnode.attrs
   const _select = state.onSelect
   state.onSelect = value => {
     _select && _select(value), (state.selected = value)
