@@ -1,25 +1,25 @@
 {
-  "name": "@guyven/mithril-helpers",
-  "version": "0.4.5",
-  "license": "MIT",
-  "imports": {
-    "@types/mithril": "npm:@types/mithril@^2.2.7",
-    "mithril": "npm:mithril@^2.3.2"
-  },
-  "exports": {
-    "./form": "./form.ts",
-    "./table": "./table.ts",
-    "./util": "./util.ts"
-  },
-  "publish": {
-    "include": [
-      "LICENSE",
-      "README.md",
-      "deno.json",
-      "form.ts",
-      "table.ts",
-      "util.ts"
-    ]
-  },
-  "compilerOptions": { "lib": ["deno.ns", "dom", "dom.iterable"] }
+	"name": "@guyven/mithril-helpers",
+	"version": "0.4.5",
+	"license": "MIT",
+	"imports": {
+		"@types/mithril": "npm:@types/mithril@^2.2.7",
+		"mithril": "npm:mithril@^2.3.2"
+	},
+	"exports": {
+		"./form": "./form.ts",
+		"./table": "./table.ts",
+		"./util": "./util.ts"
+	},
+	"publish": {
+		"include": [
+			"LICENSE",
+			"README.md",
+			"deno.json",
+			"form.ts",
+			"table.ts",
+			"util.ts"
+		]
+	},
+	"compilerOptions": { "lib": ["deno.ns", "dom", "dom.iterable"] }
 }

@@ -1,6 +1,7 @@
 {
-  "arrowParens": "avoid",
-  "semi": false,
-  "experimentalTernaries": true,
-  "objectWrap": "collapse"
+	"arrowParens": "avoid",
+	"semi": false,
+	"useTabs": true,
+	"experimentalTernaries": true,
+	"objectWrap": "collapse"
 }
