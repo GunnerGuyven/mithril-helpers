@@ -46,9 +46,6 @@ arguments, properties, and any non-obvious caveats.
 
 ## Tools
 
-Currently favored package manager is `pnpm` but that is open to reconsideration
-and usage of other package managers will be allowed and supported when not
-disruptive.
-
-Typescript is the language of choice. Prettier and ESLint the formatter and
-linter respectively.
+Project converted to `deno` (previously was `node` using `pnpm` as the package
+manager). This means Typescript is used as a matter of course. Deno's own
+linter is used and complimented by Prettier for formatting.
