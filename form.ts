@@ -1,5 +1,35 @@
 import m from "mithril"
 
+export type InputAttrs = Partial<{
+	/** initial input value */
+	value: string
+	/** input type */
+	type: string
+	/** event fired on value change */
+	onInput: (value: string) => void
+}>
+export const Input: m.Component<InputAttrs> = {
+	view: vnode => {
+		const { value, type, onInput = () => {} } = vnode.attrs
+		return m("input", {
+			value,
+			type,
+			oninput: (e: { target: HTMLInputElement }) => onInput(e.target.value),
+		})
+	},
+}
+
+export const InputStateful: m.ClosureComponent<{
+	state?: InputAttrs
+}> = initialVnode => {
+	const { state = {} } = initialVnode.attrs
+	const _input = state.onInput
+	state.onInput = value => {
+		_input && _input(value), (state.value = value)
+	}
+	return { view: () => m(Input, state) }
+}
+
 type SelectOption = string | [value: string, label: string]
 export type SelectAttrs = Partial<{
 	/**
