@@ -128,3 +128,69 @@ export const SelectStateful: m.ClosureComponent<{
 		},
 	}
 }
+
+/**
+ * Provides a clickable control that toggles between light and dark mode for
+ * your application.  You must supply the visible element of this control (can
+ * be an image, text or anything else).
+ *
+ * This stores your setting in localStorage if it is contrary to the matchMedia
+ * (OS / browser setting).  It also clears localStorage if setting agrees with
+ * matchMedia.  This means it only toggles between native mode and opposite
+ * mode.  Additionally if the OS or browser setting is changed it is respected
+ * (unless you have manually chosen the opposite).
+ *
+ * Dark mode is enabled by adding a 'dark' class to the root element of the
+ * page. If using tailwindcss you can capitalize on this by overriding the
+ * builtin `dark:` rule prefix with this in your css:
+ *
+ * `@custom-variant dark (&:where(.dark, .dark *));`
+ */
+export const ThemeToggleLink: m.ClosureComponent<m.Attributes> = () => {
+	const updateDarkMode = () => {
+		const match =
+			matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+
+		const currentTheme =
+			localStorage.getItem("theme") ?
+				localStorage.getItem("theme") == "dark" ?
+					"dark"
+				:	"light"
+			:	match
+
+		document.documentElement.classList.toggle("dark", currentTheme == "dark")
+
+		if (currentTheme == match) {
+			localStorage.removeItem("theme")
+		}
+	}
+
+	matchMedia("(prefers-color-scheme: dark)").onchange = updateDarkMode
+
+	updateDarkMode()
+
+	return {
+		view: vnode =>
+			m(
+				"a",
+				{
+					onclick: () => {
+						const currLocalMode = localStorage.getItem("theme")
+						localStorage.setItem(
+							"theme",
+							currLocalMode ?
+								currLocalMode == "dark" ?
+									"light"
+								:	"dark"
+							: matchMedia("(prefers-color-scheme: dark)").matches ? "light"
+							: "dark",
+						)
+						updateDarkMode()
+					},
+					title: "toggle theme",
+					...vnode.attrs,
+				},
+				vnode.children,
+			),
+	}
+}

@@ -4,6 +4,7 @@ This is a collection of utility methods and building blocks for developing
 applications rapidly using [Mithril.js](https://mithril.js.org/) as the
 renderer.
 
+- `0.4.7` 2025-06-17 : added ToggleThemeLink for setting light and dark mode
 - `0.4.6` 2025-06-16 : added Input control
 - `0.4.5` 2025-06-11 : converted to deno for first jsr release;
   formatting updates

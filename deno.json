@@ -1,6 +1,6 @@
 {
 	"name": "@guyven/mithril-helpers",
-	"version": "0.4.6",
+	"version": "0.4.7",
 	"license": "MIT",
 	"imports": {
 		"@types/mithril": "npm:@types/mithril@^2.2.7",
