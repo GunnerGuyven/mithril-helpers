@@ -25,8 +25,10 @@ export const InputStateful: m.ClosureComponent<{
 	const { state = {} } = initialVnode.attrs
 	const _input = state.onInput
 	state.onInput = value => {
-		_input && _input(value), (state.value = value)
+		_input && _input(value)
+		state.value = value
 	}
+
 	return { view: () => m(Input, state) }
 }
 
@@ -104,7 +106,8 @@ export const SelectStateful: m.ClosureComponent<{
 		initialVnode.attrs
 	const _select = state.onSelect
 	state.onSelect = value => {
-		_select && _select(value), (state.selected = value)
+		_select && _select(value)
+		state.selected = value
 	}
 	const resetSelected = () => {
 		if (state.options?.length) {

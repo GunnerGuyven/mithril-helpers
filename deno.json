@@ -1,10 +1,10 @@
 {
 	"name": "@guyven/mithril-helpers",
-	"version": "0.4.7",
+	"version": "0.4.8",
 	"license": "MIT",
 	"imports": {
 		"@types/mithril": "npm:@types/mithril@^2.2.7",
-		"mithril": "npm:mithril@^2.3.2"
+		"mithril": "npm:mithril@^2.3.8"
 	},
 	"exports": {
 		"./form": "./form.ts",
@@ -17,7 +17,7 @@
 			"README.md",
 			"deno.json",
 			"form.ts",
-			"table.ts",
+			"grid.ts",
 			"util.ts"
 		]
 	},

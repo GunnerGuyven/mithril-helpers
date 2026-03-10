@@ -33,9 +33,10 @@ export const PerformCountdown = ({
 	if (verbose) {
 		const _tick = tick
 		const _done = done
-		tick = (curr, dest) => (
-			console.info(`Countdown from ${curr} to ${dest}`), _tick(curr, dest)
-		)
+		tick = (curr, dest) => {
+			console.info(`Countdown from ${curr} to ${dest}`)
+			_tick(curr, dest)
+		}
 		done = () => (console.info("Countdown complete"), _done())
 	}
 	const step = () =>

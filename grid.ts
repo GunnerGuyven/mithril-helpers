@@ -50,7 +50,8 @@ export const PaginationStateful: m.ClosureComponent<{
 	const { state = {} } = initialVnode.attrs
 	const _change = state.onPageChange
 	state.onPageChange = pageNumber => {
-		_change && _change(pageNumber), (state.selected = pageNumber)
+		_change && _change(pageNumber)
+		state.selected = pageNumber
 	}
 
 	return { view: () => m(Pagination, state) }
@@ -296,14 +297,15 @@ export const paginateGridData = (
 		get total() {
 			return Math.ceil(gridData.rows.length / p.pageSize)
 		},
-		onPageSizeChange: (size: number) => (
-			(p.pageSize = size),
-			(p.selected = Math.min(p.selected, p.total)),
-			(_page = pageTo(p.selected))
-		),
-		onPageChange: (newPage: number) => (
-			(p.selected = newPage), (_page = pageTo(p.selected))
-		),
+		onPageSizeChange: (size: number) => {
+			p.pageSize = size
+			p.selected = Math.min(p.selected, p.total)
+			_page = pageTo(p.selected)
+		},
+		onPageChange: (newPage: number) => {
+			p.selected = newPage
+			_page = pageTo(p.selected)
+		},
 	}
 	const pageTo = (num: number) =>
 		gridData.rows.slice((num - 1) * p.pageSize, num * p.pageSize)
