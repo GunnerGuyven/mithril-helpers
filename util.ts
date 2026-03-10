@@ -208,3 +208,36 @@ export const TryParseJSONAsType = <T>(
 	if (x && typeCheck(x)) return x
 	return null
 }
+
+// capitalize first letter of a string
+const cap = (str: string) => str && str[0].toUpperCase() + str.slice(1)
+// split a camelCased string into array of component parts
+const arrayFromCamelCase = (str: string) => {
+	const matches = str.matchAll(
+		/[a-z][A-Z]|[A-Z][A-Z][a-z]|[a-zA-Z]\d|\d[a-zA-Z]/g,
+	)
+	const output = []
+	let idx = 0
+	let m = matches.next()
+	let input = null
+	while (!m.done) {
+		const { input: i, index: d } = m.value
+		output.push(i.slice(idx, d + 1))
+		idx = d + 1
+		input = i
+		m = matches.next()
+	}
+	if (input) {
+		output.push(input.slice(idx))
+	}
+	return output
+}
+
+// lifted from https://stackoverflow.com/a/58861675/1007150
+// const labelFromKey = key => // camel cased
+//   cap((key.match(/[A-Z]+(?![a-z])|[A-Z]?[a-z]+|\d+/g) || []).join(" "))
+// snake || pascal + camel
+export const LabelFromKey = (key: string) =>
+	(key.includes("_") ? key.split("_") : arrayFromCamelCase(key))
+		.map(cap)
+		.join(" ") || cap(key)
