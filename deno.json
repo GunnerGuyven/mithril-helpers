@@ -1,6 +1,6 @@
 {
 	"name": "@guyven/mithril-helpers",
-	"version": "0.4.8",
+	"version": "0.5.0",
 	"license": "MIT",
 	"imports": {
 		"@types/mithril": "npm:@types/mithril@^2.2.7",
@@ -8,7 +8,7 @@
 	},
 	"exports": {
 		"./form": "./form.ts",
-		"./table": "./table.ts",
+		"./grid": "./grid.ts",
 		"./util": "./util.ts"
 	},
 	"publish": {
