@@ -7,11 +7,14 @@ export type InputAttrs = Partial<{
 	type: string
 	/** event fired on value change */
 	onInput: (value: string) => void
+
+	[props: string]: unknown
 }>
 export const Input: m.Component<InputAttrs> = {
 	view: vnode => {
-		const { value, type, onInput = () => {} } = vnode.attrs
+		const { value, type, onInput = () => {}, ...rest } = vnode.attrs
 		return m("input", {
+			...m.censor(rest),
 			value,
 			type,
 			oninput: (e: { target: HTMLInputElement }) => onInput(e.target.value),

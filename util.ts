@@ -241,3 +241,60 @@ export const LabelFromKey = (key: string) =>
 	(key.includes("_") ? key.split("_") : arrayFromCamelCase(key))
 		.map(cap)
 		.join(" ") || cap(key)
+
+/**
+ * Group items in given array by multiple unique key values, items may appear in more than one group
+ * @returns map of unique key values and the grouped results.
+ * The results are whole items given in arr by default,
+ * but overriding add allows these groups to be user defined.
+ */
+export const multiGroupBy = <K, T>(
+	/** collection supporting .reduce operation, not mutated */
+	arr: T[],
+	/** key lookup method, if string then item[keys] is used */
+	keys: ((item: T) => K[]) | keyof T,
+	/** compositing strategy, group is not passed when a new key is found, return will be stored as the new group for that key */
+	add: (element: T, group?: T[]) => T[] = (element, group = []) => (
+		group.push(element),
+		group
+	),
+): Map<K, T> => {
+	const getKeyValues =
+		typeof keys === "function" ? keys : (ele: T) => [ele[keys]]
+
+	return arr.reduce((acc, ele) => {
+		const ks = getKeyValues(ele) || []
+		for (const k of ks) {
+			if (acc.has(k)) {
+				acc.set(k, add(ele, acc.get(k)))
+			} else {
+				acc.set(k, add(ele))
+			}
+		}
+		return acc
+	}, new Map())
+}
+
+/**
+ * Group items in given array by unique key values
+ * @returns map of unique key values and the grouped results.
+ * The results are whole items given in arr by default,
+ * but overriding add allows these groups to be user defined.
+ */
+export const groupBy = <K, T>(
+	/** collection supporting .reduce operation, not mutated */
+	arr: T[],
+	/** key lookup method, if string then item[key] is used */
+	key: ((item: T) => K) | keyof T,
+	/** compositing strategy, group is not passed when a new key is found, return will be stored as the new group for that key */
+	add: (element: T, group?: T[]) => T[] = (element, group = []) => (
+		group.push(element),
+		group
+	),
+): Map<K, T> => {
+	const getKeyValue =
+		typeof key === "function" ? key : (ele: T) => ele[key] as K
+	const getKeyValues = (ele: T) => [getKeyValue(ele)]
+
+	return multiGroupBy(arr, getKeyValues, add)
+}
