@@ -4,6 +4,7 @@ This is a collection of utility methods and building blocks for developing
 applications rapidly using [Mithril.js](https://mithril.js.org/) as the
 renderer.
 
+- `0.5.1` 2026-03-15 : added ability to use extended attributes on Input
 - `0.5.0` 2026-03-10 : renamed table to 'grid'
 - `0.4.7` 2025-06-17 : added ToggleThemeLink for setting light and dark mode
 - `0.4.6` 2025-06-16 : added Input control
