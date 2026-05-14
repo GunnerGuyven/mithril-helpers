@@ -257,14 +257,19 @@ export const createGridData = (
 		autoDetectSubGridField = true,
 		subGridField,
 		subGridFieldIdx = -1,
+		showDebug = false,
 	}: Partial<{
 		showHeader: boolean
 		subGridField: string
 		subGridFieldIdx: number
 		autoDetectSubGridField: boolean
+		showDebug: boolean
 	}> = {},
 ): GridData | undefined => {
-	if (!data || !data.length) return undefined
+	if (!data || !data.length) {
+		showDebug && console.warn("data must be an array")
+		return undefined
+	}
 	const columns = Object.keys(data[0])
 	subGridFieldIdx = subGridField ? columns.indexOf(subGridField) : -1
 	if (subGridFieldIdx === -1 && autoDetectSubGridField) {

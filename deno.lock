@@ -1,12 +1,12 @@
 {
   "version": "5",
   "specifiers": {
-    "npm:@types/mithril@^2.2.7": "2.2.7",
+    "npm:@types/mithril@^2.2.8": "2.2.8",
     "npm:mithril@^2.3.8": "2.3.8"
   },
   "npm": {
-    "@types/mithril@2.2.7": {
-      "integrity": "sha512-uetxoYizBMHPELl6DSZUfO6Q/aOm+h0NUCv9bVAX2iAxfrdBSOvU9KKFl+McTtxR13F+BReYLY814pJsZvnSxg=="
+    "@types/mithril@2.2.8": {
+      "integrity": "sha512-FN9Tv1+Nlr0LNPGnIL/xOxLJfu5WW2n8HAFeo4yxF+/O0per/8g080xlXoo+xj8baowAcfsNI3k80DxyLY34gQ=="
     },
     "mithril@2.3.8": {
       "integrity": "sha512-za/Yo7qXEckjm5syrSfaaI9Utf4tCUT3T1IOIYqH6Lrj7G0OZuYYLAY9SV4ygoaAf0+CNqU92MBt+7pmo53JVQ=="
@@ -14,7 +14,7 @@
   },
   "workspace": {
     "dependencies": [
-      "npm:@types/mithril@^2.2.7",
+      "npm:@types/mithril@^2.2.8",
       "npm:mithril@^2.3.8"
     ]
   }
