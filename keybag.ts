@@ -6,19 +6,20 @@
 // 	- [ ]
 // 	- [ ]
 //
-// const stateManager = state => {
-//   state = state || {}
-//   const set = (id, key, value, deleteOnEmpty = false) => {
-//     state[id] = state[id] || {}
-//     state[id][key] = value
-//     deleteOnEmpty && !value && delete state[id][key]
-//   }
-//   const get = (id, key) => (key ? (state[id] || {})[key] : state[id] || {})
-//   const toggle = (id, key) => set(id, key, !get(id, key))
-//   const clear = id => (state[id] = {})
-//   const dirty = (id, key) => get(id, key) && (set(id, key, false), true)
-//   return { set, get, toggle, clear, dirty }
-// }
+const stateManager = state => {
+	state = state || {}
+	const set = (id, key, value, deleteOnEmpty = false) => {
+		state[id] = state[id] || {}
+		state[id][key] = value
+		deleteOnEmpty && !value && delete state[id][key]
+	}
+	const get = (id, key) => (key ? (state[id] || {})[key] : state[id] || {})
+	const toggle = (id, key) => set(id, key, !get(id, key))
+	const clear = id => (state[id] = {})
+	const dirty = (id, key) => get(id, key) && (set(id, key, false), true)
+	const toObj = () => state
+	return { set, get, toggle, clear, dirty, toObj }
+}
 
 type KeyTypes = ["sort", "dir"] | ["search"] | [...string[]]
 type ValueFor<K extends KeyTypes> =
@@ -64,8 +65,22 @@ export const bag = (
 	return b
 }
 
+console.log("keybag", "------------------")
 const y = bag()
-console.log("start", y.toObj())
-y.set(["a", "b"], "goat cheese")
+console.log("start : ", y.toObj())
+console.log("set [a, b] = goat cheese", y.set(["a", "b"], "goat cheese"))
 console.log("first", y.toObj())
-console.log("get ['a', 'b']", y.get(["a", "b"]))
+console.log("get [a, b] : ", y.get(["a", "b"]))
+console.log("state : ", y.toObj())
+console.log("set [a, c] = cow cheese", y.set(["a", "c"], "cow cheese"))
+console.log("state : ", y.toObj())
+console.log()
+console.log()
+console.log("statemanager", "------------------")
+const z = stateManager()
+console.log("start : ", z.toObj())
+console.log("set a, b = goat cheese", z.set("a", "b", "goat cheese"))
+console.log("get a, b :", z.get("a", "b"))
+console.log("state : ", z.toObj())
+console.log("set a, c = cow cheese", z.set("a", "c", "cow cheese"))
+console.log("state : ", z.toObj())
