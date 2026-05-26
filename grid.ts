@@ -1,17 +1,17 @@
-import m, { type Children } from "mithril"
+import m from "mithril"
 import { Select } from "./form.ts"
 
-type PaginationStyle = {
+type PaginationStyle = Partial<{
 	parent: string
 	prev: string
 	next: string
 	itemContainer: string
-	itemOuter?: string
+	itemOuter: string
 	item: string
 	itemSkip: string
 	itemCurrent: string
-	pageSizeContainer?: string
-}
+	pageSizeContainer: string
+}>
 
 type PaginationAttrs = Partial<{
 	total: number
@@ -74,15 +74,26 @@ export const Pagination: m.Component<PaginationAttrs> = {
 			skipIndicator = "…", // "‥"
 			style = bulmaPaginationStyle,
 		} = vNode.attrs
+		const s = {
+			parent: style.parent || "",
+			prev: style.prev || "",
+			next: style.next || "",
+			itemContainer: style.itemContainer || "",
+			itemOuter: style.itemOuter, // no render if undefined
+			item: style.item || "",
+			itemSkip: style.itemSkip || "",
+			itemCurrent: style.itemCurrent || "",
+			pageSizeContainer: style.pageSizeContainer, // no render if undefined
+		}
 
 		const item =
-			style.itemOuter ?
+			s.itemOuter ?
 				(num: number, current = false) =>
 					m(
-						style.itemOuter || "",
+						s.itemOuter || "",
 						{ key: `p${num}` },
 						m(
-							current ? style.itemCurrent : style.item,
+							current ? s.itemCurrent : s.item,
 							{
 								"aria-label": `Go to Page ${num}`,
 								onclick: () => onPageChange(num),
@@ -92,7 +103,7 @@ export const Pagination: m.Component<PaginationAttrs> = {
 					)
 			:	(num: number, current = false) =>
 					m(
-						current ? style.itemCurrent : style.item,
+						current ? s.itemCurrent : s.item,
 						{
 							key: `p${num}`,
 							"aria-label": `Go to Page ${num}`,
@@ -102,13 +113,13 @@ export const Pagination: m.Component<PaginationAttrs> = {
 					)
 
 		const skipR =
-			style.itemOuter ?
-				m(style.itemOuter, { key: "skipR" }, m(style.itemSkip, skipIndicator))
-			:	m(style.itemSkip, { key: "skipR" }, skipIndicator)
+			s.itemOuter ?
+				m(s.itemOuter, { key: "skipR" }, m(s.itemSkip, skipIndicator))
+			:	m(s.itemSkip, { key: "skipR" }, skipIndicator)
 		const skipL =
-			style.itemOuter ?
-				m(style.itemOuter, { key: "skipL" }, m(style.itemSkip, skipIndicator))
-			:	m(style.itemSkip, { key: "skipL" }, skipIndicator)
+			s.itemOuter ?
+				m(s.itemOuter, { key: "skipL" }, m(s.itemSkip, skipIndicator))
+			:	m(s.itemSkip, { key: "skipL" }, skipIndicator)
 
 		function* range(start: number, end: number, map: (v: number) => m.Child) {
 			for (let i = start; i <= end; i++) {
@@ -132,14 +143,12 @@ export const Pagination: m.Component<PaginationAttrs> = {
 			:	range(selected + 1, total, item)),
 		]
 		return m(
-			style.parent,
+			s.parent,
 			{ role: "navigation", "aria-label": "pagination" },
 			pageSize &&
-				(style.pageSizeContainer ?
-					m(style.pageSizeContainer, pageSelect)
-				:	pageSelect),
+				(s.pageSizeContainer ? m(s.pageSizeContainer, pageSelect) : pageSelect),
 			m(
-				style.prev,
+				s.prev,
 				{
 					onclick: () => selected > 1 && onPageChange(selected - 1),
 					disabled: selected <= 1,
@@ -147,26 +156,30 @@ export const Pagination: m.Component<PaginationAttrs> = {
 				prevIndicator,
 			),
 			m(
-				style.next,
+				s.next,
 				{
 					onclick: () => selected < total && onPageChange(selected + 1),
 					disabled: selected >= total,
 				},
 				nextIndicator,
 			),
-			m(style.itemContainer, list(selected)),
+			m(s.itemContainer, list(selected)),
 		)
 	},
 }
 
-type GridDataRow = { cells: Children[]; subGrid?: GridData }
+type GridDataRow = { cells: m.Children[]; subGrid?: GridData } | m.Children[]
 export type GridData = {
-	meta: Partial<{ subGridFieldIdx: number; showHeader: boolean }>
-	columns: Children[]
+	meta: Partial<{
+		subGridFieldIdx: number
+		showHeader: boolean
+		showFooter: boolean
+	}>
+	columns: m.Children[]
 	rows: GridDataRow[]
 }
 
-const GridField: m.Component<{ isHeader?: boolean; value: Children }> = {
+const GridField: m.Component<{ isHeader?: boolean; value: m.Children }> = {
 	view: vnode => {
 		const { value, isHeader = false } = vnode.attrs
 		return m(
@@ -178,7 +191,7 @@ const GridField: m.Component<{ isHeader?: boolean; value: Children }> = {
 	},
 }
 
-const GridHeaderRow: m.Component<{ columns: Children[] }> = {
+const GridHeaderRow: m.Component<{ columns: m.Children[] }> = {
 	view: vnode => {
 		const { columns } = vnode.attrs
 		return m(
@@ -195,8 +208,11 @@ const GridRow: m.Component<{
 }> = {
 	view: vnode => {
 		const { row, renderKey, subGridFieldIdx } = vnode.attrs
-		const cells: Children[] = row.cells.map(f => m(GridField, { value: f }))
-		row.subGrid &&
+		const cells: m.Children[] = (Array.isArray(row) ? row : row.cells).map(f =>
+			m(GridField, { value: f }),
+		)
+		!Array.isArray(row) &&
+			row.subGrid &&
 			cells.splice(subGridFieldIdx, 0, m(Grid, { data: row.subGrid }))
 		return m(`tr[key-in=${renderKey}]`, { key: renderKey }, cells)
 	},
@@ -221,6 +237,7 @@ export const Grid: m.Component<{ data?: GridData }> = {
 							subGridFieldIdx: meta.subGridFieldIdx || -1,
 						}),
 					),
+					meta.showFooter && m("thead", m(GridHeaderRow, { columns })),
 				)
 			:	m("", "Empty Result")
 	},
@@ -249,17 +266,19 @@ export const PagedGrid: m.Component<
 	},
 }
 
-type GridDataSubItem = Record<string, Children>[]
+type GridDataSubItem = Record<string, m.Children>[]
 export const createGridData = (
-	data?: Record<string, Children | GridDataSubItem>[],
+	data?: Record<string, m.Children | GridDataSubItem>[],
 	{
 		showHeader = true,
+		showFooter = false,
 		autoDetectSubGridField = true,
 		subGridField,
 		subGridFieldIdx = -1,
 		showDebug = false,
 	}: Partial<{
 		showHeader: boolean
+		showFooter: boolean
 		subGridField: string
 		subGridFieldIdx: number
 		autoDetectSubGridField: boolean
@@ -282,23 +301,25 @@ export const createGridData = (
 			subGridFieldIdx > -1 &&
 			(x.splice(subGridFieldIdx, 1)[0] as GridDataSubItem)
 		return {
-			cells: x as Children[],
+			cells: x as m.Children[],
 			subGrid: createGridData(subGrid || undefined),
 		}
 	})
 
-	return { rows, columns, meta: { subGridFieldIdx, showHeader } }
+	return { rows, columns, meta: { subGridFieldIdx, showHeader, showFooter } }
 }
 
 export const paginateGridData = (
-	gridData?: GridData,
-	paging?: Partial<{ pageSize: number; currentPage: number }>,
+	gridData: GridData,
+	options: PaginationAttrs = {},
 ): PagedGridData | undefined => {
-	if (!gridData) return undefined
-	const { pageSize = 10, currentPage = 1 } = paging || {}
-	const p = {
-		selected: currentPage,
-		pageSize,
+	const p: {
+		pageSize: number
+		selected: number
+		total: number
+	} & PaginationAttrs = {
+		pageSize: options.pageSize || 10,
+		selected: options.selected || 1,
 		get total() {
 			return Math.ceil(gridData.rows.length / p.pageSize)
 		},
@@ -311,10 +332,11 @@ export const paginateGridData = (
 			p.selected = newPage
 			_page = pageTo(p.selected)
 		},
+		...options,
 	}
 	const pageTo = (num: number) =>
 		gridData.rows.slice((num - 1) * p.pageSize, num * p.pageSize)
-	let _page = pageTo(currentPage)
+	let _page = pageTo(p.selected)
 
 	// mixing spread with get does not work before ES2018
 	return {
