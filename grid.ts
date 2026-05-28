@@ -230,12 +230,15 @@ export const Grid: m.Component<{ data?: GridData }> = {
 				m(
 					"table",
 					meta.showHeader && m("thead", m(GridHeaderRow, { columns })),
-					rows.map((row, idx) =>
-						m(GridRow, {
-							row,
-							renderKey: idx,
-							subGridFieldIdx: meta.subGridFieldIdx || -1,
-						}),
+					m(
+						"tbody",
+						rows.map((row, idx) =>
+							m(GridRow, {
+								row,
+								renderKey: idx,
+								subGridFieldIdx: meta.subGridFieldIdx || -1,
+							}),
+						),
 					),
 					meta.showFooter && m("thead", m(GridHeaderRow, { columns })),
 				)
