@@ -4,19 +4,20 @@ This is a collection of utility methods and building blocks for developing
 applications rapidly using [Mithril.js](https://mithril.js.org/) as the
 renderer.
 
+- `0.5.3` 2026-06-03 : added metrics properties to `PagedGridData`
 - `0.5.2` 2026-05-27 : simplified Grid data-contract; added footer display to Grid;
   added explicit `tbody` to Grid; simplified pagination style override;
   `paginatedGridData` helper now passes all options through
 - `0.5.1` 2026-03-15 : added ability to use extended attributes on Input
 - `0.5.0` 2026-03-10 : renamed table to 'grid'
-- `0.4.7` 2025-06-17 : added ToggleThemeLink for setting light and dark mode
+- `0.4.7` 2025-06-17 : added `ToggleThemeLink` for setting light and dark mode
 - `0.4.6` 2025-06-16 : added Input control
 - `0.4.5` 2025-06-11 : converted to deno for first jsr release;
   formatting updates
 - `0.4.4` 2024-10-29 : updated `package.json` to expand the options of
   consuming projects
 - `0.4.3` 2024-09-23 : added json helpers
-- `0.4.2` 2024-03-11 : SelectStateful now triggers OnSelect when selection is
+- `0.4.2` 2024-03-11 : `SelectStateful` now triggers OnSelect when selection is
   reset
 - `0.4.1` 2024-03-08 : expanded functionality of Select; added boolean value
   handling to Grid

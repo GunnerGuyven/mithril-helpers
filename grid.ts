@@ -246,7 +246,11 @@ export const Grid: m.Component<{ data?: GridData }> = {
 	},
 }
 
-export type PagedGridData = GridData & { paginationProps: PaginationAttrs }
+export type PagedGridData = GridData & { paginationProps: PaginationAttrs } & {
+	rangeIndexFirst: number
+	rangeIndexLast: number
+	fullTotal: number
+}
 export const PagedGrid: m.Component<
 	Partial<{
 		data: PagedGridData
@@ -315,7 +319,7 @@ export const createGridData = (
 export const paginateGridData = (
 	gridData: GridData,
 	options: PaginationAttrs = {},
-): PagedGridData | undefined => {
+): PagedGridData => {
 	const p: {
 		pageSize: number
 		selected: number
@@ -348,5 +352,17 @@ export const paginateGridData = (
 			return _page
 		},
 		paginationProps: p,
+		get rangeIndexFirst() {
+			return p.pageSize * (p.selected - 1) + 1
+		},
+		get rangeIndexLast() {
+			return Math.min(
+				this.rangeIndexFirst + p.pageSize - 1,
+				gridData.rows.length,
+			)
+		},
+		get fullTotal() {
+			return gridData.rows.length
+		},
 	}
 }
