@@ -330,16 +330,18 @@ export const paginateGridData = (
 		get total() {
 			return Math.ceil(gridData.rows.length / p.pageSize)
 		},
+		...options,
 		onPageSizeChange: (size: number) => {
 			p.pageSize = size
 			p.selected = Math.min(p.selected, p.total)
 			_page = pageTo(p.selected)
+			options.onPageSizeChange && options.onPageSizeChange(size)
 		},
 		onPageChange: (newPage: number) => {
 			p.selected = newPage
 			_page = pageTo(p.selected)
+			options.onPageChange && options.onPageChange(newPage)
 		},
-		...options,
 	}
 	const pageTo = (num: number) =>
 		gridData.rows.slice((num - 1) * p.pageSize, num * p.pageSize)
