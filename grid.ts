@@ -355,7 +355,7 @@ export const paginateGridData = (
 		},
 		paginationProps: p,
 		get rangeIndexFirst() {
-			return p.pageSize * (p.selected - 1) + 1
+			return gridData.rows.length && p.pageSize * (p.selected - 1) + 1
 		},
 		get rangeIndexLast() {
 			return Math.min(
