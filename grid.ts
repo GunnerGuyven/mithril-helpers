@@ -17,6 +17,7 @@ type PaginationAttrs = Partial<{
 	total: number
 	selected: number
 	onPageChange: (newPageNum: number) => void
+	onSkipClick: () => void
 
 	pageSize: number
 	pageSizeOptions: number[]
@@ -67,6 +68,7 @@ export const Pagination: m.Component<PaginationAttrs> = {
 			pageSize,
 			pageSizeOptions = [5, 10, 15, 20],
 			onPageSizeChange = () => {},
+			onSkipClick = () => {},
 
 			proximity = 2,
 			prevIndicator = "←", // "←" "⇽" "⟵" "⇐" "⊲" "‹" "◃" "◂" "≺" "≪" "⋘" "⦑" "⟨" "⟪" "⧏" "⪡" "⪻" "«" "⪦"
@@ -114,12 +116,20 @@ export const Pagination: m.Component<PaginationAttrs> = {
 
 		const skipR =
 			s.itemOuter ?
-				m(s.itemOuter, { key: "skipR" }, m(s.itemSkip, skipIndicator))
-			:	m(s.itemSkip, { key: "skipR" }, skipIndicator)
+				m(
+					s.itemOuter,
+					{ key: "skipR", onclick: onSkipClick },
+					m(s.itemSkip, skipIndicator),
+				)
+			:	m(s.itemSkip, { key: "skipR", onclick: onSkipClick }, skipIndicator)
 		const skipL =
 			s.itemOuter ?
-				m(s.itemOuter, { key: "skipL" }, m(s.itemSkip, skipIndicator))
-			:	m(s.itemSkip, { key: "skipL" }, skipIndicator)
+				m(
+					s.itemOuter,
+					{ key: "skipL", onclick: onSkipClick },
+					m(s.itemSkip, skipIndicator),
+				)
+			:	m(s.itemSkip, { key: "skipL", onclick: onSkipClick }, skipIndicator)
 
 		function* range(start: number, end: number, map: (v: number) => m.Child) {
 			for (let i = start; i <= end; i++) {
@@ -250,6 +260,7 @@ export type PagedGridData = GridData & { paginationProps: PaginationAttrs } & {
 	rangeIndexFirst: number
 	rangeIndexLast: number
 	fullTotal: number
+	goToPage: (page: number) => void
 }
 export const PagedGrid: m.Component<
 	Partial<{
@@ -365,6 +376,10 @@ export const paginateGridData = (
 		},
 		get fullTotal() {
 			return gridData.rows.length
+		},
+		goToPage: (page: number) => {
+			p.selected = Math.max(1, Math.min(page, p.total))
+			_page = pageTo(p.selected)
 		},
 	}
 }

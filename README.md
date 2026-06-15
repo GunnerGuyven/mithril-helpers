@@ -4,6 +4,7 @@ This is a collection of utility methods and building blocks for developing
 applications rapidly using [Mithril.js](https://mithril.js.org/) as the
 renderer.
 
+- `0.5.6` 2026-06-15 : added support for direct page navigation
 - `0.5.5` 2026-06-04 : corrected display of `PagedGridData.rangeIndexFirst`
   in the case of empty result
 - `0.5.4` 2026-06-04 : `paginatedGridData` allows for event overriding
